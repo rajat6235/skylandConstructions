@@ -44,9 +44,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${lato.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <noscript>
-          <style>{"[data-reveal]{opacity:1!important}"}</style>
-        </noscript>
         <SiteHeader />
         {children}
       </body>

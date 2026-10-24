@@ -28,7 +28,7 @@ const features = [
 
 export function Features() {
   return (
-    <section className="overflow-x-clip bg-ink px-[30px] pt-20 pb-[83px] text-white min-[1230px]:px-0">
+    <section className="overflow-x-clip bg-ink px-[30px] pt-20 pb-[83px] text-white lg:px-0">
       <div className="mx-auto grid max-w-[1170px] md:grid-cols-3">
         {features.map((feature, i) => (
           <div key={feature.title} className={feature.columnClassName}>

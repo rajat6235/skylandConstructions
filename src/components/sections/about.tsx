@@ -5,7 +5,7 @@ import { Tilt } from "@/components/ui/tilt";
 
 export function About() {
   return (
-    <section className="overflow-x-clip bg-white px-[30px] py-20 md:py-[100px] lg:py-[150px] min-[1230px]:px-0">
+    <section className="overflow-x-clip bg-white px-[30px] py-20 md:py-[100px] lg:py-[150px] lg:px-0">
       <div className="mx-auto max-w-[1170px] lg:flex">
         <Reveal animation="fade-in-left" className="lg:w-[45.043%] lg:shrink-0">
           <Image
