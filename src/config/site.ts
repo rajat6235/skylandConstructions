@@ -13,8 +13,7 @@ export const siteConfig = {
     phone: "+13067155448",
   },
   social: {
-    // TODO: replace with the real Facebook page URL from the WordPress site.
-    facebook: "https://www.facebook.com/",
+    facebook: "https://www.facebook.com/profile.php?id=61550277327228",
   },
   nav: [
     { label: "Home", href: "/" },

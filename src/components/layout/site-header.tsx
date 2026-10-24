@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { SearchIcon } from "@/components/icons";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/config/site";
 
@@ -15,7 +14,7 @@ export function SiteHeader() {
     // Transparent so it can sit on top of a full-bleed hero; elsewhere the body background shows through.
     <header className="relative z-20 h-[172px] lg:h-[202px]">
       <TopBar />
-      <Container className="relative flex items-center gap-4 pt-[17px] lg:grid lg:grid-cols-[130px_1fr_auto]">
+      <Container className="relative flex items-center gap-4 pt-[17px] lg:grid lg:grid-cols-[130px_1fr]">
         <Link href="/" className="-ml-3 block w-[100px] shrink-0 lg:w-[130px]">
           <Image
             src={logo.src}
@@ -28,7 +27,7 @@ export function SiteHeader() {
           />
         </Link>
 
-        <nav aria-label="Main" className="hidden justify-center pl-[43px] lg:flex">
+        <nav aria-label="Main" className="hidden justify-center pr-[38px] pl-[43px] lg:flex">
           <ul className="flex items-center gap-[41px] text-[17px] text-brand">
             {siteConfig.nav.map((item) => (
               <li key={item.href}>
@@ -40,14 +39,7 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-3 lg:mr-[5px]">
-          <button
-            type="button"
-            aria-label="Search"
-            className="flex size-[33px] items-center justify-center rounded-[3px] bg-brand text-white"
-          >
-            <SearchIcon className="size-[18px]" />
-          </button>
+        <div className="ml-auto lg:hidden">
           <MobileNav />
         </div>
       </Container>
