@@ -12,7 +12,7 @@ export function SiteHeader() {
 
   return (
     // Transparent so it can sit on top of a full-bleed hero; elsewhere the body background shows through.
-    <header className="relative z-20 h-[172px] lg:h-[202px]">
+    <header id="top" className="relative z-20 h-[172px] lg:h-[202px]">
       <TopBar />
       <Container className="relative flex items-center gap-4 pt-[17px] lg:grid lg:grid-cols-[130px_1fr]">
         <Link href="/" className="-ml-3 block w-[100px] shrink-0 lg:w-[130px]">

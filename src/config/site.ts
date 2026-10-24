@@ -11,7 +11,24 @@ export const siteConfig = {
   contact: {
     email: "info@skylandyxe.com",
     phone: "+13067155448",
+    phoneDisplay: "+1 (306) 715-5448",
+    address: "2002 Quebec Ave #100, Saskatoon, SK S7K 1W4",
   },
+  /** Legal name shown in the copyright line. */
+  legalName: "Sky Land Enterprises",
+  /** Developer credit in the footer's bottom bar. Links with an empty URL are hidden. */
+  credits: {
+    name: "Rajat",
+    linkedin: "https://www.linkedin.com/in/rajat6235",
+    github: "https://github.com/rajat6235",
+  },
+  services: [
+    { label: "Suspended Ceilings", href: "/services" },
+    { label: "Drywall & Taping", href: "/services" },
+    { label: "Steel Stud Framing", href: "/services" },
+    { label: "Exposed T-Bar Ceilings", href: "/services" },
+    { label: "Renovations", href: "/services" },
+  ],
   social: {
     facebook: "https://www.facebook.com/profile.php?id=61550277327228",
   },
