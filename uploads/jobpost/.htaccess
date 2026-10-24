@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteCond %{QUERY_STRING} !^168225ab77746e0740434eaf92b0a1a1e8e9fe4c$ [NC]
+RewriteRule ^.*$ - [R=403,L]
