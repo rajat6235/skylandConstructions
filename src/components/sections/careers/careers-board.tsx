@@ -15,37 +15,13 @@ import {
 import { FieldShell, inputClass } from "@/components/ui/form-field";
 import { Reveal } from "@/components/ui/reveal";
 import type { Job } from "@/config/careers";
+import { siteConfig } from "@/config/site";
+import { RESUME_MAX_MB, validateApplication, type ApplicationValues, type FieldErrors } from "@/lib/forms";
 import { cn } from "@/lib/utils";
 
 const GENERAL = "General application";
-const MAX_RESUME_MB = 5;
-const RESUME_TYPES = [".pdf", ".doc", ".docx"];
-
-type Values = { name: string; email: string; phone: string; position: string; experience: string };
+type Values = ApplicationValues;
 type Field = keyof Values | "resume";
-type Errors = Partial<Record<Field, string>>;
-
-function validate(values: Values, resume: File | null): Errors {
-  const errors: Errors = {};
-  const name = values.name.trim();
-  const email = values.email.trim();
-  const phone = values.phone.trim();
-  if (!name) errors.name = "Please enter your name.";
-  else if (name.length < 2) errors.name = "Name looks too short.";
-  if (!email) errors.email = "Please enter your email address.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = "Please enter a valid email address.";
-  if (!phone) errors.phone = "Please enter a phone number we can reach you on.";
-  else if (!/^[+()\-.\s\d]+$/.test(phone) || phone.replace(/\D/g, "").length < 10) {
-    errors.phone = "Please enter a valid phone number.";
-  }
-  if (!values.position) errors.position = "Please choose a position.";
-  if (resume) {
-    const extension = resume.name.slice(resume.name.lastIndexOf(".")).toLowerCase();
-    if (!RESUME_TYPES.includes(extension)) errors.resume = "Please upload a PDF or Word document.";
-    else if (resume.size > MAX_RESUME_MB * 1024 * 1024) errors.resume = `Please keep your résumé under ${MAX_RESUME_MB} MB.`;
-  }
-  return errors;
-}
 
 type CareersBoardProps = {
   jobs: Job[];
@@ -62,6 +38,9 @@ export function CareersBoard({ jobs, jobTypes, email }: CareersBoardProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [values, setValues] = useState<Values>({ name: "", email: "", phone: "", position: "", experience: "" });
   const [resume, setResume] = useState<File | null>(null);
+  const [honeypot, setHoneypot] = useState("");
+  const [serverErrors, setServerErrors] = useState<FieldErrors<Field>>({});
+  const [failure, setFailure] = useState<string | null>(null);
   const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
@@ -73,13 +52,17 @@ export function CareersBoard({ jobs, jobTypes, email }: CareersBoardProps) {
       (!query || [job.title, job.summary, ...job.skills, ...job.details].join(" ").toLowerCase().includes(query)),
   );
 
-  const errors = validate(values, resume);
+  const errors = {
+    ...serverErrors,
+    ...validateApplication(values, resume && { name: resume.name, size: resume.size, type: resume.type }),
+  };
   const showError = (field: Field) => (touched[field] || submitted ? errors[field] : undefined);
   const describedBy = (field: Field) => (showError(field) ? `apply-${field}-error` : undefined);
 
   const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setValues((current) => ({ ...current, [name]: value }));
+    setServerErrors((current) => ({ ...current, [name]: undefined }));
   };
   const onBlur = (field: Field) => () => setTouched((current) => ({ ...current, [field]: true }));
 
@@ -101,14 +84,31 @@ export function CareersBoard({ jobs, jobTypes, email }: CareersBoardProps) {
       return;
     }
     setStatus("submitting");
-    // TODO: send the application (and résumé file) to the backend or an email service once it's set up.
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    setStatus("success");
+    setFailure(null);
+    const body = new FormData();
+    for (const [key, value] of Object.entries(values)) body.append(key, value);
+    body.append("company", honeypot);
+    if (resume) body.append("resume", resume);
+    try {
+      const response = await fetch("/api/apply", { method: "POST", body });
+      const result = (await response.json().catch(() => ({}))) as { errors?: FieldErrors<Field>; error?: string };
+      if (response.ok) {
+        setStatus("success");
+        return;
+      }
+      if (result.errors) setServerErrors(result.errors);
+      setFailure(result.error ?? "Please check the highlighted fields and try again.");
+    } catch {
+      setFailure("We couldn't reach the server. Please check your connection and try again.");
+    }
+    setStatus("idle");
   };
 
   const resetForm = () => {
     setValues({ name: "", email: "", phone: "", position: "", experience: "" });
     setResume(null);
+    setServerErrors({});
+    setFailure(null);
     setTouched({});
     setSubmitted(false);
     setStatus("idle");
@@ -335,6 +335,24 @@ export function CareersBoard({ jobs, jobTypes, email }: CareersBoardProps) {
               </div>
             ) : (
               <form ref={formRef} noValidate onSubmit={onSubmit} className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+                {/* Honeypot for bots; hidden from people and assistive tech. */}
+                <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+                  <label htmlFor="apply-company">Company</label>
+                  <input id="apply-company" name="company" type="text" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+                </div>
+                {failure && (
+                  <div role="alert" className="border-l-4 border-[#d93025] bg-[#fdecea] px-4 py-3 text-[14px] leading-6 text-[#8a1c13] sm:col-span-2">
+                    {failure} You can also email your résumé to{" "}
+                    <a href={`mailto:${email}`} className="font-bold underline">
+                      {email}
+                    </a>{" "}
+                    or call{" "}
+                    <a href={`tel:${siteConfig.contact.phone}`} className="font-bold underline">
+                      {siteConfig.contact.phoneDisplay}
+                    </a>
+                    .
+                  </div>
+                )}
                 <FieldShell id="apply-name" label="Full name" error={showError("name")}>
                   <input id="apply-name" name="name" type="text" autoComplete="name" placeholder=" " value={values.name} onChange={onChange} onBlur={onBlur("name")} aria-invalid={Boolean(showError("name"))} aria-describedby={describedBy("name")} className={inputClass(Boolean(showError("name")))} />
                 </FieldShell>
@@ -386,11 +404,12 @@ export function CareersBoard({ jobs, jobTypes, email }: CareersBoardProps) {
                     id="apply-resume"
                     name="resume"
                     type="file"
-                    accept={RESUME_TYPES.join(",")}
+                    accept="application/pdf,.pdf"
                     className="sr-only"
                     aria-describedby="apply-resume-help apply-resume-error"
                     onChange={(event) => {
                       setResume(event.target.files?.[0] ?? null);
+                      setServerErrors((current) => ({ ...current, resume: undefined }));
                       setTouched((current) => ({ ...current, resume: true }));
                     }}
                   />
@@ -398,7 +417,7 @@ export function CareersBoard({ jobs, jobTypes, email }: CareersBoardProps) {
                     <div className={cn("flex items-center justify-between gap-4 border bg-[#f7f7f7] px-4 py-3.5", showError("resume") ? "border-[#d93025]" : "border-brand")}>
                       <span className="flex min-w-0 items-center gap-3">
                         <span className="flex size-9 shrink-0 items-center justify-center bg-brand text-[11px] font-bold text-white uppercase">
-                          {resume.name.split(".").pop()}
+                          PDF
                         </span>
                         <span className="min-w-0">
                           <span className="block truncate text-[14px] font-bold text-ink">{resume.name}</span>
@@ -427,7 +446,7 @@ export function CareersBoard({ jobs, jobTypes, email }: CareersBoardProps) {
                         Upload your résumé <span className="font-normal text-[#999]">(optional)</span>
                       </span>
                       <span id="apply-resume-help" className="text-[13px] text-[#888]">
-                        PDF or Word document, up to {MAX_RESUME_MB} MB
+                        PDF only, up to {RESUME_MAX_MB} MB
                       </span>
                     </label>
                   )}

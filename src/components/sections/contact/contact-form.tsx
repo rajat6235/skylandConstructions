@@ -4,39 +4,15 @@ import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 
 import { CheckIcon, ChevronRightIcon, PaperPlaneIcon } from "@/components/icons";
 import { FieldShell, inputClass } from "@/components/ui/form-field";
+import { siteConfig } from "@/config/site";
+import { MESSAGE_MAX, validateContact, type ContactValues, type FieldErrors } from "@/lib/forms";
 import { cn } from "@/lib/utils";
 
-type Values = { name: string; email: string; phone: string; service: string; message: string };
-type Field = keyof Values;
-type Errors = Partial<Record<Field, string>>;
+type Field = keyof ContactValues;
 
-const EMPTY: Values = { name: "", email: "", phone: "", service: "", message: "" };
-const MESSAGE_MAX = 1000;
+const EMPTY: ContactValues = { name: "", email: "", phone: "", service: "", message: "" };
 const FIELD_ORDER: Field[] = ["name", "email", "phone", "service", "message"];
-
-function validate(values: Values): Errors {
-  const errors: Errors = {};
-  const name = values.name.trim();
-  const email = values.email.trim();
-  const phone = values.phone.trim();
-  const message = values.message.trim();
-
-  if (!name) errors.name = "Please enter your name.";
-  else if (name.length < 2) errors.name = "Name looks too short.";
-
-  if (!email) errors.email = "Please enter your email address.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) errors.email = "Please enter a valid email address.";
-
-  if (phone && (!/^[+()\-.\s\d]+$/.test(phone) || phone.replace(/\D/g, "").length < 10)) {
-    errors.phone = "Please enter a valid phone number, or leave it blank.";
-  }
-
-  if (!message) errors.message = "Please tell us a little about your project.";
-  else if (message.length < 10) errors.message = "Please add a few more details (at least 10 characters).";
-  else if (message.length > MESSAGE_MAX) errors.message = `Please keep your message under ${MESSAGE_MAX} characters.`;
-
-  return errors;
-}
+const PHONE_DISPLAY = siteConfig.contact.phoneDisplay;
 
 type ContactFormProps = {
   services: readonly string[];
@@ -44,17 +20,21 @@ type ContactFormProps = {
 
 export function ContactForm({ services }: ContactFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
-  const [values, setValues] = useState<Values>(EMPTY);
+  const [values, setValues] = useState<ContactValues>(EMPTY);
+  const [honeypot, setHoneypot] = useState("");
+  const [serverErrors, setServerErrors] = useState<FieldErrors<Field>>({});
+  const [failure, setFailure] = useState<string | null>(null);
   const [touched, setTouched] = useState<Partial<Record<Field, boolean>>>({});
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
 
-  const errors = validate(values);
+  const errors = { ...serverErrors, ...validateContact(values) };
   const showError = (field: Field) => (touched[field] || submitted ? errors[field] : undefined);
 
   const onChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setValues((current) => ({ ...current, [name]: value }));
+    setServerErrors((current) => ({ ...current, [name]: undefined }));
   };
   const onBlur = (field: Field) => () => setTouched((current) => ({ ...current, [field]: true }));
 
@@ -68,13 +48,30 @@ export function ContactForm({ services }: ContactFormProps) {
     }
 
     setStatus("submitting");
-    // TODO: send `values` to the backend (API route, email service or CRM) once it's set up.
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    setStatus("success");
+    setFailure(null);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, company: honeypot }),
+      });
+      const result = (await response.json().catch(() => ({}))) as { errors?: FieldErrors<Field>; error?: string };
+      if (response.ok) {
+        setStatus("success");
+        return;
+      }
+      if (result.errors) setServerErrors(result.errors);
+      setFailure(result.error ?? "Please check the highlighted fields and try again.");
+    } catch {
+      setFailure("We couldn't reach the server. Please check your connection and try again.");
+    }
+    setStatus("idle");
   };
 
   const reset = () => {
     setValues(EMPTY);
+    setServerErrors({});
+    setFailure(null);
     setTouched({});
     setSubmitted(false);
     setStatus("idle");
@@ -109,6 +106,20 @@ export function ContactForm({ services }: ContactFormProps) {
 
   return (
     <form ref={formRef} noValidate onSubmit={onSubmit} className="grid gap-x-5 gap-y-4 sm:grid-cols-2">
+      {/* Honeypot for bots; hidden from people and assistive tech. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+        <label htmlFor="contact-company">Company</label>
+        <input id="contact-company" name="company" type="text" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(event) => setHoneypot(event.target.value)} />
+      </div>
+      {failure && (
+        <div role="alert" className="border-l-4 border-[#d93025] bg-[#fdecea] px-4 py-3 text-[14px] leading-6 text-[#8a1c13] sm:col-span-2">
+          {failure} You can also call us at{" "}
+          <a href={`tel:${siteConfig.contact.phone}`} className="font-bold underline">
+            {PHONE_DISPLAY}
+          </a>
+          .
+        </div>
+      )}
       <FieldShell id="contact-name" label="Full name" error={showError("name")}>
         <input
           id="contact-name"
