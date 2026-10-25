@@ -7,6 +7,9 @@ export type Job = {
   /** Trades knowledge the role requires. */
   skills: string[];
   details: string[];
+  /** ISO date the job was posted, and the date it closes (used by Google Jobs). */
+  datePosted: string;
+  validThrough: string;
 };
 
 /** Open positions shown on the Careers page. Remove a job here to take it down. */
@@ -24,6 +27,8 @@ export const jobs: Job[] = [
       "Wage depends on experience and qualifications.",
       "Installers, framers and helpers are all welcome to apply.",
     ],
+    datePosted: "2026-10-25",
+    validThrough: "2027-01-31",
   },
 ];
 

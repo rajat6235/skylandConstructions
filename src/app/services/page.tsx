@@ -10,12 +10,16 @@ import { Testimonials } from "@/components/sections/testimonials/testimonials";
 import { Reveal } from "@/components/ui/reveal";
 import { services } from "@/config/services";
 import { siteConfig } from "@/config/site";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, businessRef, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Services",
+export const metadata: Metadata = pageMetadata({
+  title: "Drywall, Framing & Ceiling Services | Skyland Saskatoon",
   description:
-    "Drywall, steel framing, mud taping, T-bar ceilings, Regdex framing, basement development, renovation and demolition — commercial and residential general contracting in Saskatoon.",
-};
+    "Drywall, steel stud framing, mud taping, T-bar ceilings, basement development, renovation and demolition for homes and businesses in Saskatoon, SK.",
+  path: "/services",
+  absoluteTitle: true,
+});
 
 const process = [
   { title: "Consultation & Quote", text: "We listen to what you need, review the space and give you a clear quote." },
@@ -63,9 +67,41 @@ export default function ServicesPage() {
     },
   ];
 
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      name: "Construction services in Saskatoon",
+      url: absoluteUrl("/services"),
+      itemListElement: services.map((service) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: service.title,
+          description: service.summary,
+          url: absoluteUrl(`/services#${service.slug}`),
+          serviceType: service.title,
+          provider: businessRef,
+          areaServed: { "@type": "City", name: "Saskatoon" },
+          ...(service.photos?.[0] ? { image: absoluteUrl(service.photos[0].src) } : {}),
+        },
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+  ];
+
   return (
     <main className="flex flex-1 flex-col">
-      <PageHero title="Our Services" image="/images/about-gallery/11-commercial-warehouse-fit-out.jpg" />
+      <JsonLd data={structuredData} />
+      <PageHero title="Our Services" path="/services" image="/images/about-gallery/11-commercial-warehouse-fit-out.jpg" />
 
       {/* Overview */}
       <section className="overflow-x-clip bg-white px-[30px] pt-20 pb-20 md:pt-24 lg:px-0">

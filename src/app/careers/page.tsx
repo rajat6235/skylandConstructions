@@ -7,12 +7,16 @@ import { PageHero } from "@/components/sections/page-hero";
 import { Reveal } from "@/components/ui/reveal";
 import { jobTypes, jobs } from "@/config/careers";
 import { siteConfig } from "@/config/site";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Careers",
+export const metadata: Metadata = pageMetadata({
+  title: "Construction Jobs in Saskatoon | Skyland Careers",
   description:
-    "Join the Skyland Construction team in Saskatoon. We're hiring drywall installers, steel framers and drywall helpers.",
-};
+    "Join Skyland Construction in Saskatoon. We're hiring drywall installers, steel framers and drywall helpers for commercial and residential projects.",
+  path: "/careers",
+  absoluteTitle: true,
+});
 
 const reasons = [
   { title: "Varied, Steady Work", text: "Commercial and residential projects across Saskatoon — no two jobs the same." },
@@ -22,9 +26,26 @@ const reasons = [
 ];
 
 export default function CareersPage() {
+  const { contact } = siteConfig;
+  const jobPostings = jobs.map((job) => ({
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title.replace(/ · /g, " / "),
+    description: `<p>${job.summary}</p><ul>${[...job.skills.map((skill) => `Knowledge of ${skill.toLowerCase()}`), ...job.details].map((item) => `<li>${item}</li>`).join("")}</ul>`,
+    datePosted: job.datePosted,
+    validThrough: `${job.validThrough}T23:59:59-06:00`,
+    employmentType: job.type === "Full Time" ? "FULL_TIME" : job.type === "Part Time" ? "PART_TIME" : "CONTRACTOR",
+    directApply: true,
+    url: absoluteUrl("/careers"),
+    hiringOrganization: { "@type": "Organization", name: siteConfig.name, sameAs: siteConfig.url, logo: absoluteUrl(siteConfig.logo.src) },
+    jobLocation: { "@type": "Place", address: { "@type": "PostalAddress", ...contact.postal } },
+    skills: job.skills.join(", "),
+  }));
+
   return (
     <main className="flex flex-1 flex-col">
-      <PageHero title="Careers" image="/images/about-gallery/15-commercial-corridor-framing.jpeg" />
+      <JsonLd data={jobPostings} />
+      <PageHero title="Careers" path="/careers" image="/images/about-gallery/15-commercial-corridor-framing.jpeg" />
 
       <section className="overflow-x-clip bg-white px-[30px] py-20 md:py-24 lg:px-0">
         <div className="mx-auto max-w-[1170px]">

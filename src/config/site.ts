@@ -1,7 +1,12 @@
 export const siteConfig = {
   name: "Skyland Construction",
-  description: "Skyland Construction — quality building and construction services.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /** Other names the business is known by; used in structured data. */
+  alternateNames: ["Sky Land Enterprises", "Skyland Enterprises", "SkyLand Construction"],
+  tagline: "General Contractor in Saskatoon, SK",
+  description:
+    "Saskatoon general contractor for commercial and residential projects: drywall, steel stud framing, mud taping, T-bar ceilings, basements and renovations.",
+  /** Production URL. Override with NEXT_PUBLIC_SITE_URL (e.g. http://localhost:3000 in development). */
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://skylandyxe.com").replace(/\/$/, ""),
   logo: {
     src: "/wp-content/uploads/2023/08/122.png",
     alt: "Sky Land Enterprises — General Contractor",
@@ -14,6 +19,15 @@ export const siteConfig = {
     phoneDisplay: "+1 (306) 715-5448",
     address: "2002 Quebec Ave #100, Saskatoon, SK S7K 1W4",
     building: "Rockport Officeplex",
+    /** Structured address, used for local SEO markup. Keep in sync with `address`. */
+    postal: {
+      streetAddress: "2002 Quebec Ave #100",
+      addressLocality: "Saskatoon",
+      addressRegion: "SK",
+      postalCode: "S7K 1W4",
+      addressCountry: "CA",
+    },
+    areaServed: ["Saskatoon", "Saskatchewan"],
   },
   /** Legal name shown in the copyright line. */
   legalName: "Sky Land Enterprises",

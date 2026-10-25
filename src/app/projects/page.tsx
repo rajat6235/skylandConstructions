@@ -7,12 +7,16 @@ import { Testimonials } from "@/components/sections/testimonials/testimonials";
 import { VideoReel } from "@/components/sections/videos/video-reel";
 import { Reveal } from "@/components/ui/reveal";
 import { projectCategories, projectImages, type ProjectCategory } from "@/config/projects";
+import { JsonLd } from "@/components/seo/json-ld";
+import { absoluteUrl, businessRef, pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Projects",
+export const metadata: Metadata = pageMetadata({
+  title: "Our Projects | Skyland Construction Saskatoon",
   description:
-    "Browse Skyland Construction's recent work in Saskatoon — suspended ceilings, drywall, steel stud framing and renovations for commercial and residential clients.",
-};
+    "See Skyland Construction's recent Saskatoon projects: steel stud framing, drywall, T-bar and suspended ceilings, renovations and commercial fit-outs.",
+  path: "/projects",
+  absoluteTitle: true,
+});
 
 const categoryDescriptions: Record<ProjectCategory, string> = {
   "Suspended Ceiling": "T-bar and suspended ceiling systems, bulkheads and feature ceilings.",
@@ -27,9 +31,28 @@ export default function ProjectsPage() {
     count: projectImages.filter((image) => image.category === category).length,
   }));
 
+  const gallery = {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    name: "Skyland Construction project gallery",
+    url: absoluteUrl("/projects"),
+    author: businessRef,
+    image: projectImages.map((image) => ({
+      "@type": "ImageObject",
+      contentUrl: absoluteUrl(image.src),
+      name: image.title,
+      description: `${image.alt} — ${image.category}, Saskatoon`,
+      width: image.width,
+      height: image.height,
+      contentLocation: { "@type": "Place", name: "Saskatoon, Saskatchewan" },
+      creator: businessRef,
+    })),
+  };
+
   return (
     <main className="flex flex-1 flex-col">
-      <PageHero title="Our Projects" image="/images/about-gallery/06-warehouse-interior-build-out.jpg" />
+      <JsonLd data={gallery} />
+      <PageHero title="Our Projects" path="/projects" image="/images/about-gallery/06-warehouse-interior-build-out.jpg" />
 
       {/* Intro + categories */}
       <section className="overflow-x-clip bg-white px-[30px] pt-20 pb-16 md:pt-24 lg:px-0">

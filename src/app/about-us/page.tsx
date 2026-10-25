@@ -10,12 +10,15 @@ import { Testimonials } from "@/components/sections/testimonials/testimonials";
 import { VideoReel } from "@/components/sections/videos/video-reel";
 import { Reveal } from "@/components/ui/reveal";
 import { googleReviews } from "@/config/reviews";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "About Us",
+export const metadata: Metadata = pageMetadata({
+  title: "About Skyland Construction | Saskatoon Contractor",
   description:
-    "Sky Land Enterprises is a family-owned commercial and residential construction company in Saskatoon, delivering quality work across retail, medical, food service and corporate projects.",
-};
+    "Skyland Construction (Sky Land Enterprises) is a family-owned commercial and residential general contractor in Saskatoon, SK, known for quality, on-time work.",
+  path: "/about-us",
+  absoluteTitle: true,
+});
 
 const stats = [
   { value: googleReviews.rating.toFixed(1), label: "Google rating", star: true },
@@ -48,7 +51,7 @@ const industries = ["Retail", "Medical & Dental", "Food Services", "Corporate Of
 export default function AboutPage() {
   return (
     <main className="flex flex-1 flex-col">
-      <PageHero title="About Us" image="/images/hero/architectural-house-exterior.jpg" />
+      <PageHero title="About Us" path="/about-us" image="/images/hero/architectural-house-exterior.jpg" />
 
       {/* Who we are */}
       <section className="overflow-x-clip bg-white px-[30px] py-20 md:py-28 lg:px-0">

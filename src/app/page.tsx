@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { About } from "@/components/sections/about";
 import { ContactSection } from "@/components/sections/contact/contact-section";
 import { Features } from "@/components/sections/features";
@@ -6,6 +8,15 @@ import { LatestProjects } from "@/components/sections/projects/latest-projects";
 import { JoinTeamBanner } from "@/components/sections/careers/join-team-banner";
 import { Testimonials } from "@/components/sections/testimonials/testimonials";
 import { VideoReel } from "@/components/sections/videos/video-reel";
+import { siteConfig } from "@/config/site";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: `${siteConfig.name} | ${siteConfig.tagline}`,
+  description: siteConfig.description,
+  path: "/",
+  absoluteTitle: true,
+});
 
 export default function HomePage() {
   return (
