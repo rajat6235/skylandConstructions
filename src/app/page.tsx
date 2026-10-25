@@ -4,6 +4,7 @@ import { Features } from "@/components/sections/features";
 import { Hero } from "@/components/sections/hero/hero";
 import { LatestProjects } from "@/components/sections/projects/latest-projects";
 import { Testimonials } from "@/components/sections/testimonials/testimonials";
+import { VideoReel } from "@/components/sections/videos/video-reel";
 
 export default function HomePage() {
   return (
@@ -12,6 +13,7 @@ export default function HomePage() {
       <Features />
       <About />
       <LatestProjects />
+      <VideoReel />
       <Testimonials />
       <ContactSection />
     </main>

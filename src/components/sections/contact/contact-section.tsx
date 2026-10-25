@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { EnvelopeIcon, FacebookIcon, MapPinIcon, PhoneIcon } from "@/components/icons";
 import { Reveal } from "@/components/ui/reveal";
 import { siteConfig } from "@/config/site";
@@ -40,7 +42,19 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
           className="mx-auto grid max-w-[1170px] overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.18)] lg:grid-cols-[5fr_7fr]"
         >
           {/* Contact details */}
-          <div className="relative overflow-hidden bg-ink px-7 py-10 text-[#bbbbbb] md:px-12 md:py-14">
+          <div className="group/panel relative isolate overflow-hidden bg-ink px-7 py-10 text-[#bbbbbb] md:px-12 md:py-14">
+            {/* Office photo behind a dark overlay keeps the text readable while showing where we are. */}
+            <Image
+              src="/images/about/skyland-office-2002-quebec-ave.jpeg"
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 490px, 100vw"
+              className="-z-20 object-cover object-[50%_60%] transition-transform duration-[2s] ease-out group-hover/panel:scale-105"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 bg-gradient-to-b from-ink/90 via-ink/80 to-ink/[0.62]"
+            />
             <div
               aria-hidden="true"
               className="absolute -top-24 -right-24 size-64 rounded-full border-[40px] border-brand/10"

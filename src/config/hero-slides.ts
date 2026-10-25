@@ -18,8 +18,8 @@ export type HeroSlide = {
  */
 export const heroSlides: HeroSlide[] = [
   {
-    image: "architectural-house-exterior.jpg",
-    alt: "Modern two-storey house exterior at dusk",
+    image: "skyland-crew-installing-wall-panels.jpeg",
+    alt: "Skyland crew on a lift installing wall panels on a steel-framed building",
     eyebrow: "Superior Quality",
     title: "Bring Your Vision to Life with Sky Land Enterprises.",
     description: "Our team collaborates with you to understand your vision for the project.",

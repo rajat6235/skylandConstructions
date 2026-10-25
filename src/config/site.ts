@@ -13,6 +13,7 @@ export const siteConfig = {
     phone: "+13067155448",
     phoneDisplay: "+1 (306) 715-5448",
     address: "2002 Quebec Ave #100, Saskatoon, SK S7K 1W4",
+    building: "Rockport Officeplex",
   },
   /** Legal name shown in the copyright line. */
   legalName: "Sky Land Enterprises",

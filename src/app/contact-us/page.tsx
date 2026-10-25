@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ContactSection } from "@/components/sections/contact/contact-section";
+import { OfficeVisit } from "@/components/sections/contact/office-visit";
 import { PageHero } from "@/components/sections/page-hero";
 
 export const metadata: Metadata = {
@@ -14,6 +15,7 @@ export default function ContactPage() {
     <main className="flex flex-1 flex-col">
       <PageHero title="Contact Us" image="/images/hero/construction-carpenter-worker.jpg" />
       <ContactSection />
+      <OfficeVisit />
     </main>
   );
 }
