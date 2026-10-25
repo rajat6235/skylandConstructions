@@ -5,6 +5,7 @@ import { CtaBand } from "@/components/sections/about-page/cta-band";
 import { PhotoGallery } from "@/components/sections/about-page/photo-gallery";
 import { StorySplit } from "@/components/sections/about-page/story-split";
 import { PageHero } from "@/components/sections/page-hero";
+import { JoinTeamBanner } from "@/components/sections/careers/join-team-banner";
 import { Testimonials } from "@/components/sections/testimonials/testimonials";
 import { VideoReel } from "@/components/sections/videos/video-reel";
 import { Reveal } from "@/components/ui/reveal";
@@ -165,6 +166,7 @@ export default function AboutPage() {
       <PhotoGallery />
       <VideoReel />
       <Testimonials />
+      <JoinTeamBanner />
       <CtaBand />
     </main>
   );
