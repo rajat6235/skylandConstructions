@@ -1,6 +1,6 @@
 export const projectCategories = [
   "Suspended Ceiling",
-  "Renovation project",
+  "Renovations",
   "Drywall",
   "Steel Frame",
 ] as const;
@@ -28,7 +28,7 @@ export const projectImages: ProjectImage[] = [
     height: 2048,
     title: "Modern Kitchen Renovation",
     alt: "Renovated kitchen with grey cabinets, tile backsplash and new appliances",
-    category: "Renovation project",
+    category: "Renovations",
   },
   {
     src: "/images/about-gallery/02-circular-ceiling-feature.png",
@@ -68,7 +68,7 @@ export const projectImages: ProjectImage[] = [
     height: 2048,
     title: "Open-Plan Suite Renovation",
     alt: "Renovated open-plan suite with new flooring and kitchen",
-    category: "Renovation project",
+    category: "Renovations",
   },
   {
     src: "/images/about-gallery/14-steel-stud-corridor-framing.jpeg",
@@ -140,7 +140,7 @@ export const projectImages: ProjectImage[] = [
     height: 2048,
     title: "Kitchen Renovation",
     alt: "Renovated kitchen with wood cabinets and new flooring",
-    category: "Renovation project",
+    category: "Renovations",
   },
   {
     src: "/images/about-gallery/09-steel-stud-partition-framing.jpg",
@@ -172,7 +172,7 @@ export const projectImages: ProjectImage[] = [
     height: 2048,
     title: "Finished Room with New Flooring",
     alt: "Finished room with fresh paint, trim and vinyl plank flooring",
-    category: "Renovation project",
+    category: "Renovations",
   },
   {
     src: "/images/about-gallery/13-finished-bedroom-renovation.jpg",
@@ -180,7 +180,7 @@ export const projectImages: ProjectImage[] = [
     height: 2048,
     title: "Finished Bedroom Renovation",
     alt: "Finished bedroom with new flooring, trim and lighting",
-    category: "Renovation project",
+    category: "Renovations",
   },
   {
     src: "/images/projects/suspended-ceiling-round-opening-framing.jpeg",
@@ -212,7 +212,7 @@ export const projectImages: ProjectImage[] = [
     height: 2000,
     title: "Residential Renovation",
     alt: "Exterior of a single-storey house before renovation",
-    category: "Renovation project",
+    category: "Renovations",
   },
   {
     src: "/images/projects/suspended-ceiling-round-opening-finished.jpeg",

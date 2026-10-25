@@ -14,14 +14,22 @@ type ProjectGalleryProps = {
   images: ProjectImage[];
   /** Maximum number of images shown per filter. */
   limit?: number;
+  /** "compact": fixed-ratio grid on a dark section. "full": masonry of every photo on a light section. */
+  variant?: "compact" | "full";
 };
 
-export function ProjectGallery({ categories, images, limit = 6 }: ProjectGalleryProps) {
+export function ProjectGallery({ categories, images, limit = 6, variant = "compact" }: ProjectGalleryProps) {
+  const full = variant === "full";
   const [filter, setFilter] = useState<Filter>("All");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  const visible = (filter === "All" ? images : images.filter((image) => image.category === filter)).slice(0, limit);
+  const countFor = (category: Filter) =>
+    category === "All" ? images.length : images.filter((image) => image.category === category).length;
+  const visible = (filter === "All" ? images : images.filter((image) => image.category === filter)).slice(
+    0,
+    full ? undefined : limit,
+  );
   const open = openIndex === null ? null : visible[openIndex];
 
   useEffect(() => {
@@ -35,8 +43,15 @@ export function ProjectGallery({ categories, images, limit = 6 }: ProjectGallery
     setOpenIndex((index) => (index === null ? null : (index + delta + visible.length) % visible.length));
 
   return (
-    <div className="pt-5 md:px-6 md:pt-0 md:pb-6">
-      <ul className="mt-[7px] flex flex-wrap justify-center gap-x-[28px] gap-y-2 text-[15px] leading-[28px] font-bold max-md:gap-x-5 max-md:text-[14px]">
+    <div className={cn(!full && "pt-5 md:px-6 md:pt-0 md:pb-6")}>
+      <ul
+        className={cn(
+          "flex flex-wrap justify-center font-bold",
+          full
+            ? "gap-2.5 text-[14px] leading-5 sm:gap-3"
+            : "mt-[7px] gap-x-[28px] gap-y-2 text-[15px] leading-[28px] max-md:gap-x-5 max-md:text-[14px]",
+        )}
+      >
         {(["All", ...categories] as const).map((category) => (
           <li key={category}>
             <button
@@ -44,11 +59,29 @@ export function ProjectGallery({ categories, images, limit = 6 }: ProjectGallery
               aria-pressed={filter === category}
               onClick={() => setFilter(category)}
               className={cn(
-                "border-b-2 transition-colors hover:text-white",
-                filter === category ? "border-accent text-white" : "border-transparent text-[#aaaaaa]",
+                full
+                  ? "flex items-center gap-2 border px-4 py-2.5 transition-colors sm:px-5"
+                  : "border-b-2 transition-colors hover:text-white",
+                full
+                  ? filter === category
+                    ? "border-brand bg-brand text-white"
+                    : "border-[#ddd] bg-white text-ink hover:border-brand hover:text-brand"
+                  : filter === category
+                    ? "border-accent text-white"
+                    : "border-transparent text-[#aaaaaa]",
               )}
             >
               {category}
+              {full && (
+                <span
+                  className={cn(
+                    "min-w-6 rounded-full px-1.5 text-center text-[12px] leading-5",
+                    filter === category ? "bg-white/25" : "bg-[#f0f0f0] text-[#777]",
+                  )}
+                >
+                  {countFor(category)}
+                </span>
+              )}
             </button>
           </li>
         ))}
@@ -56,22 +89,34 @@ export function ProjectGallery({ categories, images, limit = 6 }: ProjectGallery
 
       <ul
         key={filter}
-        className="mt-5 grid grid-cols-2 gap-3 motion-safe:animate-[fade-in_0.4s_ease-out] sm:gap-5 md:mt-[15px] lg:grid-cols-3 lg:gap-[30px]"
+        className={cn(
+          "motion-safe:animate-[fade-in_0.4s_ease-out]",
+          full
+            ? "mt-10 columns-2 gap-3 sm:gap-5 lg:columns-3 lg:gap-6"
+            : "mt-5 grid grid-cols-2 gap-3 sm:gap-5 md:mt-[15px] lg:grid-cols-3 lg:gap-[30px]",
+        )}
       >
         {visible.map((image, i) => (
-          <li key={image.src}>
+          <li key={image.src} className={cn(full && "mb-3 break-inside-avoid sm:mb-5 lg:mb-6")}>
             <button
               type="button"
               onClick={() => setOpenIndex(i)}
-              className="group relative block aspect-[3/2] w-full overflow-hidden bg-black/20"
+              aria-label={`View photo: ${image.title}`}
+              className={cn(
+                "group relative block w-full overflow-hidden bg-black/20",
+                full ? "shadow-[0_10px_30px_rgba(0,0,0,0.08)]" : "aspect-[3/2]",
+              )}
             >
               <Image
                 src={image.src}
                 alt={image.alt}
                 width={image.width}
                 height={image.height}
-                sizes="(min-width: 1024px) 354px, 50vw"
-                className="size-full object-cover transition-transform duration-700 group-hover:scale-110"
+                sizes="(min-width: 1024px) 374px, 50vw"
+                className={cn(
+                  "transition-transform duration-700 group-hover:scale-110",
+                  full ? "h-auto w-full" : "size-full object-cover",
+                )}
               />
               {/* Caption is always visible so touch users see it too. */}
               <span className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent transition-colors duration-500 group-hover:bg-black/30" />
@@ -106,6 +151,9 @@ export function ProjectGallery({ categories, images, limit = 6 }: ProjectGallery
             </div>
             <figcaption className="mt-4 text-center text-[15px] text-white">
               {open.title} <span className="text-white/60">· {open.category}</span>
+              <span className="ml-3 text-white/50 tabular-nums">
+                {(openIndex ?? 0) + 1} / {visible.length}
+              </span>
             </figcaption>
             <button
               type="button"
