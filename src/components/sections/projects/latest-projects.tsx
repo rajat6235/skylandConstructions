@@ -9,10 +9,10 @@ export function LatestProjects() {
   return (
     <section
       id="projects"
-      className="overflow-x-clip bg-ink px-[30px] pt-20 pb-20 text-white md:pt-0 lg:pb-[100px] lg:px-0"
+      className="overflow-x-clip bg-ink px-[30px] pt-16 pb-16 text-white md:pt-0 lg:pb-20 lg:px-0"
     >
       <div className="mx-auto max-w-[1170px]">
-        <div className="pb-[30px] md:pt-[100px] md:pb-10 lg:flex lg:items-center lg:pb-5">
+        <div className="pb-[30px] md:pt-16 md:pb-8 lg:flex lg:items-center lg:pt-20 lg:pb-5">
           <Reveal animation="fade-in" duration="slow" className="lg:w-1/2">
             <h2 className="font-heading text-[30px] leading-[55px] font-semibold md:text-[40px]">Latest Projects</h2>
             <Reveal animation="fade-in-up">

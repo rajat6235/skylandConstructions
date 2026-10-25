@@ -25,7 +25,7 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
 
   return (
     <section id="contact" aria-labelledby="contact-heading" className="bg-[#f4f4f4]">
-      <div className="relative h-[320px] md:h-[440px]">
+      <div className="relative h-[260px] md:h-[340px]">
         <iframe
           title={`Map showing ${name} at ${contact.address}`}
           src={`https://maps.google.com/maps?q=${mapQuery}&z=15&output=embed`}
@@ -36,13 +36,13 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1 bg-brand" />
       </div>
 
-      <div className="relative z-10 -mt-16 px-4 pb-16 sm:px-[30px] md:-mt-28 md:pb-24 lg:px-0">
+      <div className="relative z-10 -mt-14 px-4 pb-12 sm:px-[30px] md:-mt-24 md:pb-16 lg:px-0">
         <Reveal
           animation="fade-in-up"
           className="mx-auto grid max-w-[1170px] overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.18)] lg:grid-cols-[5fr_7fr]"
         >
           {/* Contact details */}
-          <div className="group/panel relative isolate overflow-hidden bg-ink px-7 py-10 text-[#bbbbbb] md:px-12 md:py-14">
+          <div className="group/panel relative isolate overflow-hidden bg-ink px-7 py-9 text-[#bbbbbb] md:px-11 md:py-11">
             {/* Office photo behind a dark overlay keeps the text readable while showing where we are. */}
             <Image
               src="/images/about/skyland-office-2002-quebec-ave.jpeg"
@@ -71,7 +71,7 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
               Have a project in mind? Tell us about it and our team will work with you to understand your vision.
             </p>
 
-            <ul className="mt-8 space-y-5">
+            <ul className="mt-6 space-y-4">
               {items.map(({ icon: Icon, label, value, href, external }) => (
                 <li key={label}>
                   <a
@@ -95,7 +95,7 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
               ))}
             </ul>
 
-            <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-7">
+            <div className="mt-7 flex items-center gap-4 border-t border-white/10 pt-6">
               <span className="text-[13px] font-bold tracking-wider text-white/50 uppercase">Follow us</span>
               <a
                 href={social.facebook}
@@ -110,9 +110,9 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
           </div>
 
           {/* Form */}
-          <div className="bg-white px-7 py-10 md:px-12 md:py-14">
+          <div className="bg-white px-7 py-9 md:px-11 md:py-11">
             <h3 className="font-heading text-[24px] leading-8 font-semibold text-ink">Request a Free Quote</h3>
-            <p className="mt-2 mb-8 text-[15px] leading-[26px] text-[#666]">
+            <p className="mt-2 mb-6 text-[15px] leading-[26px] text-[#666]">
               Fill in the form and we&apos;ll get back to you as soon as possible.
             </p>
             <ContactForm services={services.map((service) => service.label)} />

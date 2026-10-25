@@ -43,7 +43,7 @@ export function SiteFooter() {
 
   return (
     <footer className="bg-[#1c1c1c] px-[30px] text-[#aaaaaa] lg:px-0">
-      <div className="mx-auto grid max-w-[1170px] grid-cols-2 gap-x-6 gap-y-10 py-14 md:gap-x-10 md:gap-y-12 md:py-20 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
+      <div className="mx-auto grid max-w-[1170px] grid-cols-2 gap-x-6 gap-y-9 py-12 md:gap-x-10 md:gap-y-10 md:py-14 lg:grid-cols-[1.4fr_1fr_1fr_1.4fr]">
         {/* Brand */}
         <div className="col-span-2 md:order-1 md:col-span-1 lg:order-none">
           <Link href="/" className="-ml-2 inline-block w-[120px]">

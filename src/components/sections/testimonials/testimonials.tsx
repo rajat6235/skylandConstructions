@@ -11,7 +11,7 @@ export function Testimonials() {
   return (
     <section
       aria-labelledby="testimonials-heading"
-      className="relative isolate overflow-x-clip bg-[url('/images/home/testimonials-bg-dining-room.jpg')] bg-cover bg-center px-[30px] py-16 md:px-5 md:py-[70px] lg:bg-fixed lg:px-0"
+      className="relative isolate overflow-x-clip bg-[url('/images/home/testimonials-bg-dining-room.jpg')] bg-cover bg-center px-[30px] py-14 md:px-5 md:py-16 lg:bg-fixed lg:px-0"
     >
       <div className="absolute inset-0 -z-10 bg-[#f9b300]/80" />
       <div className="mx-auto max-w-[1170px]">

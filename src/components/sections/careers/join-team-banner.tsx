@@ -10,7 +10,7 @@ export function JoinTeamBanner() {
   const openings = jobs.length;
 
   return (
-    <section aria-labelledby="join-heading" className="relative isolate overflow-hidden bg-ink px-[30px] py-20 text-white md:py-24 lg:px-0">
+    <section aria-labelledby="join-heading" className="relative isolate overflow-hidden bg-ink px-[30px] py-14 text-white md:py-16 lg:px-0">
       <Image
         src="/images/about-gallery/20-crew-framing-door-opening.jpeg"
         alt=""

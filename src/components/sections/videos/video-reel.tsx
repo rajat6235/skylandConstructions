@@ -42,22 +42,22 @@ export function VideoReel({ tone = "light" }: { tone?: "light" | "dark" }) {
   return (
     <section
       aria-labelledby="videos-heading"
-      className={cn("overflow-x-clip px-[30px] py-20 md:py-24 lg:px-0", dark ? "bg-ink text-white" : "bg-white")}
+      className={cn("overflow-x-clip px-[30px] py-16 md:py-20 lg:px-0", dark ? "bg-ink text-white" : "bg-white")}
     >
       <div className="mx-auto max-w-[1170px]">
-        <Reveal animation="fade-in-up" className="mx-auto mb-10 max-w-[620px] text-center">
+        <Reveal animation="fade-in-up" className="mx-auto mb-8 max-w-[620px] text-center">
           <p className="text-[13px] leading-5 font-bold tracking-[0.3em] text-brand uppercase">Behind the scenes</p>
           <h2
             id="videos-heading"
             className={cn(
-              "mt-2 font-heading text-[30px] leading-[40px] font-semibold md:text-[40px] md:leading-[52px]",
+              "mt-2 font-heading text-[28px] leading-[38px] font-semibold md:text-[36px] md:leading-[46px]",
               dark ? "text-white" : "text-black",
             )}
           >
             See Our Crew at Work
           </h2>
-          <span aria-hidden="true" className="mx-auto mt-5 block h-[3px] w-14 bg-accent" />
-          <p className={cn("mt-5 text-[16px] leading-[28px]", dark ? "text-white/70" : "text-[#555]")}>
+          <span aria-hidden="true" className="mx-auto mt-4 block h-[3px] w-14 bg-accent" />
+          <p className={cn("mt-4 text-[16px] leading-[28px]", dark ? "text-white/70" : "text-[#555]")}>
             Quick clips straight from our job sites — framing, boarding and ceilings in progress.
           </p>
         </Reveal>
