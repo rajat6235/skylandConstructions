@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { ChevronLeftIcon, ChevronRightIcon, GoogleIcon, QuoteIcon } from "@/components/icons";
 import type { Review } from "@/config/reviews";
@@ -10,39 +10,64 @@ import { Stars } from "./stars";
 type ReviewCarouselProps = {
   reviews: Review[];
   reviewsUrl: string;
+  /** Autoplay delay in milliseconds. */
+  interval?: number;
 };
 
-/** Horizontally scrolling review cards using native scroll snapping (swipe, trackpad and keyboard friendly). */
-export function ReviewCarousel({ reviews, reviewsUrl }: ReviewCarouselProps) {
+/**
+ * Horizontally scrolling review cards using native scroll snapping (swipe, trackpad and keyboard friendly).
+ * Autoplays one card at a time and loops; pauses on hover, touch, focus, when off-screen or the tab is hidden.
+ */
+export function ReviewCarousel({ reviews, reviewsUrl, interval = 5000 }: ReviewCarouselProps) {
   const trackRef = useRef<HTMLUListElement>(null);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
+  const [interacting, setInteracting] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  /** Moves one card forward or back, wrapping around at either end. */
+  const step = useCallback((direction: 1 | -1) => {
+    const track = trackRef.current;
+    const card = track?.firstElementChild as HTMLElement | null;
+    if (!track || !card) return;
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    const atStart = track.scrollLeft <= 4;
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    if (direction === 1 && atEnd) track.scrollTo({ left: 0, behavior });
+    else if (direction === -1 && atStart) track.scrollTo({ left: track.scrollWidth, behavior });
+    else track.scrollBy({ left: direction * (card.offsetWidth + gap), behavior });
+  }, []);
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    const update = () => {
-      setAtStart(track.scrollLeft <= 4);
-      setAtEnd(track.scrollLeft + track.clientWidth >= track.scrollWidth - 4);
-    };
-    update();
-    track.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    return () => {
-      track.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
+    const observer = new IntersectionObserver(([entry]) => setVisible(Boolean(entry?.isIntersecting)), {
+      threshold: 0.4,
+    });
+    observer.observe(track);
+    return () => observer.disconnect();
   }, []);
 
-  const scroll = (direction: 1 | -1) => {
-    const track = trackRef.current;
-    if (!track) return;
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    track.scrollBy({ left: direction * track.clientWidth, behavior: reducedMotion ? "auto" : "smooth" });
-  };
+  useEffect(() => {
+    if (!visible || interacting || reviews.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      if (!document.hidden) step(1);
+    }, interval);
+    return () => window.clearInterval(timer);
+  }, [interacting, interval, reviews.length, step, visible]);
 
   return (
-    <div className="mt-7 md:mt-8">
+    <div
+      className="mt-7 md:mt-8"
+      onPointerEnter={(event) => event.pointerType === "mouse" && setInteracting(true)}
+      onPointerLeave={(event) => event.pointerType === "mouse" && setInteracting(false)}
+      onTouchStart={() => setInteracting(true)}
+      onTouchEnd={() => window.setTimeout(() => setInteracting(false), interval)}
+      onFocus={() => setInteracting(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false);
+      }}
+    >
       <ul
         ref={trackRef}
         tabIndex={0}
@@ -118,8 +143,7 @@ export function ReviewCarousel({ reviews, reviewsUrl }: ReviewCarouselProps) {
           <button
             type="button"
             aria-label="Previous reviews"
-            disabled={atStart}
-            onClick={() => scroll(-1)}
+            onClick={() => step(-1)}
             className="flex size-11 items-center justify-center border-2 border-ink text-ink transition-colors hover:bg-ink hover:text-white disabled:pointer-events-none disabled:opacity-30"
           >
             <ChevronLeftIcon className="h-4" />
@@ -127,8 +151,7 @@ export function ReviewCarousel({ reviews, reviewsUrl }: ReviewCarouselProps) {
           <button
             type="button"
             aria-label="Next reviews"
-            disabled={atEnd}
-            onClick={() => scroll(1)}
+            onClick={() => step(1)}
             className="flex size-11 items-center justify-center border-2 border-ink text-ink transition-colors hover:bg-ink hover:text-white disabled:pointer-events-none disabled:opacity-30"
           >
             <ChevronRightIcon className="h-4" />
