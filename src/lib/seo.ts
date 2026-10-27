@@ -63,7 +63,7 @@ export function businessJsonLd() {
     address: { "@type": "PostalAddress", ...contact.postal },
     hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${siteConfig.name}, ${contact.address}`)}`,
     areaServed: contact.areaServed.map((name) => ({ "@type": name === "Saskatoon" ? "City" : "State", name })),
-    sameAs: [social.facebook],
+    sameAs: social.map((profile) => profile.href),
     knowsAbout: siteConfig.services.map((service) => service.label),
   };
 }

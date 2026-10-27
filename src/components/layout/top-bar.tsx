@@ -1,5 +1,6 @@
-import { EnvelopeIcon, FacebookIcon, PhoneIcon } from "@/components/icons";
+import { EnvelopeIcon, PhoneIcon } from "@/components/icons";
 import { Container } from "@/components/ui/container";
+import { SocialLinks } from "@/components/ui/social-links";
 import { siteConfig } from "@/config/site";
 
 export function TopBar() {
@@ -23,15 +24,11 @@ export function TopBar() {
             </a>
           </li>
         </ul>
-        <a
-          href={siteConfig.social.facebook}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Facebook"
-          className="flex size-[30px] shrink-0 items-center justify-center rounded-[3px] bg-white transition-opacity hover:opacity-90"
-        >
-          <FacebookIcon className="h-[15px]" />
-        </a>
+        <SocialLinks
+          className="shrink-0 gap-2"
+          itemClassName="flex size-[30px] items-center justify-center rounded-[3px] bg-white text-brand transition-colors hover:bg-brand hover:text-white"
+          iconClassName="size-[15px]"
+        />
       </Container>
     </div>
   );

@@ -48,9 +48,12 @@ export const siteConfig = {
     { label: "Renovation", href: "/services#renovation" },
     { label: "Demolition", href: "/services#demolition" },
   ],
-  social: {
-    facebook: "https://www.facebook.com/profile.php?id=61550277327228",
-  },
+  /** Social profiles, shown in this order in the top bar, contact panel and footer. */
+  social: [
+    { network: "facebook", label: "Facebook", href: "https://www.facebook.com/profile.php?id=61550277327228" },
+    { network: "instagram", label: "Instagram", href: "https://www.instagram.com/skyland.constructions" },
+    { network: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@skyland.construction" },
+  ],
   nav: [
     { label: "Home", href: "/" },
     { label: "About Us", href: "/about-us" },

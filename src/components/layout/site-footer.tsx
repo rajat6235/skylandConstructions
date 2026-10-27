@@ -2,7 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { ArrowUpIcon, EnvelopeIcon, FacebookIcon, GoogleIcon, MapPinIcon, PhoneIcon, StarIcon } from "@/components/icons";
+import { ArrowUpIcon, EnvelopeIcon, GoogleIcon, MapPinIcon, PhoneIcon, StarIcon } from "@/components/icons";
+import { SocialLinks } from "@/components/ui/social-links";
 import { googleReviews } from "@/config/reviews";
 import { siteConfig } from "@/config/site";
 
@@ -34,7 +35,7 @@ function FooterLinks({ links }: { links: readonly { label: string; href: string 
 }
 
 export function SiteFooter() {
-  const { logo, contact, social, nav, services, legalName, credits } = siteConfig;
+  const { logo, contact, nav, services, legalName, credits } = siteConfig;
   const creditLinks = [
     { label: "LinkedIn", href: credits.linkedin },
     { label: "GitHub", href: credits.github },
@@ -54,15 +55,7 @@ export function SiteFooter() {
             priorities — no project too big or too small.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <a
-              href={social.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Skyland Construction on Facebook"
-              className="flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand"
-            >
-              <FacebookIcon className="h-4" />
-            </a>
+            <SocialLinks itemClassName="flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand" />
             <a
               href={googleReviews.url}
               target="_blank"

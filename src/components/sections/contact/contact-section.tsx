@@ -1,7 +1,8 @@
 import Image from "next/image";
 
-import { EnvelopeIcon, FacebookIcon, MapPinIcon, PhoneIcon } from "@/components/icons";
+import { EnvelopeIcon, MapPinIcon, PhoneIcon } from "@/components/icons";
 import { Reveal } from "@/components/ui/reveal";
+import { SocialLinks } from "@/components/ui/social-links";
 import { siteConfig } from "@/config/site";
 
 import { ContactForm } from "./contact-form";
@@ -12,7 +13,7 @@ type ContactSectionProps = {
 };
 
 export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
-  const { contact, social, services, name } = siteConfig;
+  const { contact, services, name } = siteConfig;
   const mapQuery = encodeURIComponent(`${name}, ${contact.address}`);
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
   const Heading = headingLevel;
@@ -97,15 +98,7 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
 
             <div className="mt-7 flex items-center gap-4 border-t border-white/10 pt-6">
               <span className="text-[13px] font-bold tracking-wider text-white/50 uppercase">Follow us</span>
-              <a
-                href={social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Skyland Construction on Facebook"
-                className="flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand"
-              >
-                <FacebookIcon className="h-4" />
-              </a>
+              <SocialLinks itemClassName="flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand" />
             </div>
           </div>
 
