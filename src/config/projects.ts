@@ -95,11 +95,11 @@ export const projectImages: ProjectImage[] = [
     category: "Drywall",
   },
   {
-    src: "/images/about-gallery/20-crew-framing-door-opening.jpeg",
+    src: "/images/about-gallery/20-installing-steel-press-door-frame.jpeg",
     width: 1500,
     height: 2000,
-    title: "Crew Framing a Door Opening",
-    alt: "Two crew members framing a door opening with steel studs",
+    title: "Installing Steel Press Door Frame",
+    alt: "Two Skyland crew members installing a steel press door frame",
     category: "Steel Frame",
   },
   {

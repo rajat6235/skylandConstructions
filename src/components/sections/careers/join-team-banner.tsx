@@ -12,7 +12,7 @@ export function JoinTeamBanner() {
   return (
     <section aria-labelledby="join-heading" className="relative isolate overflow-hidden bg-ink px-[30px] py-14 text-white md:py-16 lg:px-0">
       <Image
-        src="/images/about-gallery/20-crew-framing-door-opening.jpeg"
+        src="/images/about-gallery/20-installing-steel-press-door-frame.jpeg"
         alt=""
         fill
         sizes="100vw"

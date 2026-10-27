@@ -30,7 +30,7 @@ export const services: Service[] = [
     ],
     photos: [
       { src: `${G}/14-steel-stud-corridor-framing.jpeg`, alt: "Long corridor of steel stud framing in a commercial build" },
-      { src: `${G}/20-crew-framing-door-opening.jpeg`, alt: "Skyland crew framing a door opening with steel studs" },
+      { src: `${G}/20-installing-steel-press-door-frame.jpeg`, alt: "Skyland crew installing a steel press door frame" },
     ],
   },
   {
