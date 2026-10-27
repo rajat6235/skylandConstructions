@@ -1,5 +1,6 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
+import type { CSSProperties } from "react";
 
 import { Reveal } from "@/components/ui/reveal";
 import { cn } from "@/lib/utils";
@@ -62,7 +63,11 @@ export function VideoReel({ tone = "light" }: { tone?: "light" | "dark" }) {
           </p>
         </Reveal>
 
-        <ul className="-mx-[30px] flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-[30px] px-[30px] pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-5 lg:overflow-visible lg:px-0 [&::-webkit-scrollbar]:hidden">
+        <ul
+          // One row on desktop: as many columns as clips, up to six.
+          style={{ "--video-cols": Math.min(clips.length, 6) } as CSSProperties}
+          className="-mx-[30px] flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-px-[30px] px-[30px] pb-2 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-[repeat(var(--video-cols),minmax(0,1fr))] lg:gap-4 lg:overflow-visible lg:px-0 [&::-webkit-scrollbar]:hidden"
+        >
           {clips.map((clip, i) => (
             <li key={clip.src} className="w-[62%] shrink-0 snap-start sm:w-[calc((100%-32px)/3)] lg:w-auto">
               <Reveal animation="fade-in-up" delay={i * 100}>
