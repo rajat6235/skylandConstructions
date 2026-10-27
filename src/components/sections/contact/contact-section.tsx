@@ -98,7 +98,7 @@ export function ContactSection({ headingLevel = "h2" }: ContactSectionProps) {
 
             <div className="mt-7 flex items-center gap-4 border-t border-white/10 pt-6">
               <span className="text-[13px] font-bold tracking-wider text-white/50 uppercase">Follow us</span>
-              <SocialLinks itemClassName="flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand" />
+              <SocialLinks itemClassName="size-10 rounded-full" />
             </div>
           </div>
 

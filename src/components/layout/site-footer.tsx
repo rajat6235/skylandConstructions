@@ -55,7 +55,7 @@ export function SiteFooter() {
             priorities — no project too big or too small.
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <SocialLinks itemClassName="flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand" />
+            <SocialLinks itemClassName="size-10 rounded-full" />
             <a
               href={googleReviews.url}
               target="_blank"
